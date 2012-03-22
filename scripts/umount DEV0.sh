@@ -1,8 +1,13 @@
 #!/bin/bash
 $fm_import
 
-# set your bustype here ('system' or 'session')
-BUSTYPE="system"
+cdemurc=~/.config/spacefm/.cdemurc 
+if [[ ! -f $cdemurc ]] ; then
+  echo "No cdemurc file. Will be created first time you run 'mount'."
+	exit
+else
+	. $cdemurc 
+fi
 
 # umount  image
 unset i
