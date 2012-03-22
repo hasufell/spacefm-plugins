@@ -1,8 +1,16 @@
 #!/bin/bash
 $fm_import
 
-# define bus type here ('session' or 'system')
-BUSTYPE="system"
+if [[ ! -f ~/.config/spacefm/.cdemurc ]] ; then
+	mkdir -p "$fm_cmd_data"
+	echo "#D-BUS type for cdemu" > ~/.config/spacefm/.cdemurc 
+	echo 'BUSTYPE="system"' >> ~/.config/spacefm/.cdemurc 
+	echo "cdemurc file created, default D-BUS type set to 'system'"
+	echo "you are now ready to mount images"
+	exit
+fi
+
+. ~/.config/spacefm/.cdemurc 
 
 # Seperate the filename and extension
 EXT=`echo $fm_filename | sed -e 's/.*\.//'`
