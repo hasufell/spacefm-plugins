@@ -1,0 +1,8 @@
+ChangeLog cdemu.spacefm-plugin
+
+0.0.4
+
+  * added icons
+  * removed dependency on xdialog/zenity and xterm
+
+-- hasufell Fri, 08 Jun 2012 20:34:18 UTC

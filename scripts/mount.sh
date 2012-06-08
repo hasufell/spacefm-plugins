@@ -7,7 +7,7 @@ if [[ ! -f ~/.config/spacefm/.cdemurc ]] ; then
 	echo 'BUSTYPE="system"' >> ~/.config/spacefm/.cdemurc 
 	echo "cdemurc file created, default D-BUS type set to 'system'"
 	echo "you are now ready to mount images"
-	exit
+	exit 0
 fi
 
 . ~/.config/spacefm/.cdemurc 
@@ -22,7 +22,7 @@ mount() {
 	DEV=$((`cdemu -b $BUSTYPE status | cut -f 6 -d " " | grep 0 -n -m 1 | cut -c 1`-3))
 	if [[ $DEV -lt "0" ]]; then
 		echo "You have reached the maximum number of virtual devices."
-		exit
+		exit 1
 	fi
 	
 	# Finally, load the image

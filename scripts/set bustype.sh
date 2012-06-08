@@ -4,39 +4,30 @@ $fm_import
 cdemurc=~/.config/spacefm/.cdemurc
 if [[ ! -f $cdemurc ]] ; then
 	echo "No cdemurc file. Will be created first time you run 'mount'."
-	exit
+	exit 1
 else
 	. $cdemurc 
 fi
 
-sed_die() {
-	echo "sed failed"
-	exit
+die() {
+	echo "$@"
+	exit 1
 }		
 
 set_bustype() {
 sed -i -e \
 	"s/^BUSTYPE.*/BUSTYPE=\"$BUSTYPE\"/" \
-	$cdemurc || sed_die
+	$cdemurc || die "sed failed"
 }
 
 current_BUS=$(grep BUSTYPE\= $cdemurc | sed 's/BUSTYPE\=//;s/\"//g')
 
-if [[ -n "`which zenity`" ]] ; then
-	zenity --question --ok-label "system" --cancel-label "session" \
-		--text="Set D-BUS type to use (current: ${current_BUS})" \
-		--title="cdemu Bus-type" \
-		&& BUSTYPE="system" set_bustype \
-		|| BUSTYPE="session" set_bustype
+echo "Set D-BUS type to use (current: ${current_BUS})"
+echo "0 or system"
+echo "1 or session"
+read _bustype
 
-elif [[ -n "`which Xdialog`" ]] ; then
-	Xdialog --title "cdemu Bus-type" --ok-label "system" --cancel-label \
-		"session" --yesno "Set D-BUS type to use \
-		(current: ${current_BUS})" 5 50 \
-		&& BUSTYPE="system" set_bustype \
-		|| BUSTYPE="session" set_bustype
-else
-	echo "You need either zenity or Xdialog"
-fi
+[[ ${_bustype} == 0 || ${_bustype} == system ]] && BUSTYPE=system set_bustype
+[[ ${_bustype} == 1 || ${_bustype} == session ]] && BUSTYPE=session set_bustype
 
 exit $?
